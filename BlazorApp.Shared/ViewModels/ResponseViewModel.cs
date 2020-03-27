@@ -10,8 +10,10 @@ namespace BlazorApp.Shared.ViewModels
 
         public string Message { get; set; }
 
-        public IEnumerable<string> Erros { get; set; }
+        public IEnumerable<string> Errors { get; set; }
 
         public DateTime? ExpiresDate { get; set; }
+
+        public string ResultData { get; set; }
     }
 }

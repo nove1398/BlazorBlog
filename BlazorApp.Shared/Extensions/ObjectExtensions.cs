@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlazorApp.Shared.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -19,5 +20,7 @@ namespace BlazorApp.Shared.Extensions
 
             return result.ToString();
         }
+
+
     }
 }

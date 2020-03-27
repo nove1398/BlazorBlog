@@ -17,6 +17,8 @@ namespace BlazorApp.Shared.ViewModels
         [Required]
         public string LastName { get; set; }
 
+        public DateTime Birthday { get; set; }
+
         [Required]
         public string Password { get; set; }
 

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BlazorApp.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -19,8 +19,8 @@ namespace BlazorApp.Server.Controllers
             _userService = service;
         }
 
-        //POST:/api/v1/blog/auth/register
-        [HttpPost("auth/register")]
+        //POST:/api/v1/auth/register
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody]RegisterViewModel model)
         {
             if (!ModelState.IsValid)
@@ -32,8 +32,8 @@ namespace BlazorApp.Server.Controllers
             return Ok(response);
         }
 
-        //POST:/api/v1/blog/auth/login
-        [HttpPost("auth/register")]
+        //POST:/api/v1/auth/login
+        [HttpPost("login")]
         public async Task<IActionResult> RegisterUser([FromBody]LoginViewModel model)
         {
             if (!ModelState.IsValid)
