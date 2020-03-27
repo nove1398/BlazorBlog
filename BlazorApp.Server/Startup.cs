@@ -39,10 +39,10 @@ namespace BlazorApp.Server
                 {
                     ValidateAudience = true,
                     ValidateIssuer = true,
-                    ValidIssuer = "https://blazorblog.net",
-                    ValidAudience = "https://blazorblog.net",
+                    ValidIssuer = Configuration["AuthSettings:Issuer"],
+                    ValidAudience = Configuration["AuthSettings:Audience"],
                     RequireExpirationTime = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("BlazorBlog_Pressure_Key")),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AuthSettings:Key"])),
                     ValidateIssuerSigningKey = true
                 };
             });

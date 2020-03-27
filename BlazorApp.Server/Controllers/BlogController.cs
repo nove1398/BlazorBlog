@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlazorApp.Server.Interfaces;
 using BlazorApp.Shared.Models;
+using BlazorApp.Shared.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +14,14 @@ namespace BlazorApp.Server.Controllers
     [Route("api/v1/[controller]")]
     public class BlogController : ControllerBase
     {
-        public BlogController()
-        {
+        private IUserService _userService;
 
+        public BlogController(IUserService service)
+        {
+            _userService = service;
         }
 
+        //Test service
         [HttpGet]
         public IActionResult Get()
         {
@@ -36,5 +41,7 @@ namespace BlazorApp.Server.Controllers
         {
             return null;
         }
+
+        
     }
 }

@@ -10,12 +10,17 @@ namespace BlazorApp.Shared.Models
         [Key]
         public int UserId { get; set; }
 
+        [EmailAddress(ErrorMessage = "Invalid email")]
         public string Email { get; set; }
 
         public string Username { get; set; }
 
+        [Required]
+        [Display(Name ="First Name")]
         public string FirstName { get; set; }
 
+        [Required]
+        [Display(Name ="Last Name")]
         public string LastName { get; set; }
 
         public DateTime CreatedAt { get; set; }
@@ -24,15 +29,22 @@ namespace BlazorApp.Shared.Models
 
         public AccountStatus Status { get; set; }
 
+        [Required]
         public string Password { get; set; }
 
+        [Required]
         public string Salt { get; set; }
 
         public string Avatar { get; set; }
 
+        [Display(Name ="Blog Level")]
+        public int LevelId { get; set; }
+        public Level Level { get; set; }
+
         //Related tables
         public ICollection<UserRoles> UserRoles { get; set; }
-        public ICollection<Message> Messages { get; set; }
+        public ICollection<Message> MessagesTo { get; set; }
+        public ICollection<Message> MessagesFrom { get; set; }
 
         //Easy props
         public string GetFullName()

@@ -11,5 +11,7 @@ namespace BlazorApp.Shared.ViewModels
         public string Message { get; set; }
 
         public IEnumerable<string> Erros { get; set; }
+
+        public DateTime? ExpiresDate { get; set; }
     }
 }

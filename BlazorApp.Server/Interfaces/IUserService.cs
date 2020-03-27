@@ -10,5 +10,6 @@ namespace BlazorApp.Server.Interfaces
     {
         Task<ResponseViewModel> RegisterUser(RegisterViewModel model);
         Task<ResponseViewModel> LoginUser(LoginViewModel model);
+        Task<ResponseViewModel> GetUserById(int id);
     }
 }
