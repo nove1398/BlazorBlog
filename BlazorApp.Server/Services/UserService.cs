@@ -71,6 +71,11 @@ namespace BlazorApp.Server.Services
             }
         }
 
+        /// <summary>
+        /// Login User Service
+        /// </summary>
+        /// <param name="model">Login model DTO for web api</param>
+        /// <returns>Response with token and expiredate and valid status</returns>
         public async Task<ActionResult<ResponseViewModel>> LoginUser(LoginViewModel model)
         {
 
@@ -98,13 +103,14 @@ namespace BlazorApp.Server.Services
             foreach (var role in assignedRoles)
                 new Claim(ClaimTypes.Role, role.ToString());
 
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["AuthSettings:Key"]));
             var token = new JwtSecurityToken(
                 issuer: _config["AuthSettings:Issuer"],
                 audience: _config["AuthSettings:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddDays(30),
-                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.Sha256)
+                expires: DateTime.Now.AddDays(2),
+                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
                 );
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             return new ResponseViewModel
@@ -123,8 +129,9 @@ namespace BlazorApp.Server.Services
             //Logic to register user
             string salty = PasswordHasher.GenerateSalt();
             var newUser = new User();
-            newUser.Email = model.Email;
-            newUser.FirstName = model.FirstName;
+            newUser.Email = model.Email.ToLower().Trim();
+            newUser.FirstName = model.FirstName.ToLower().Trim();
+            newUser.LastName = model.LastName.ToLower().Trim();
             newUser.Birthday = model.Birthday;
             newUser.CreatedAt = DateTime.Now;
             newUser.LevelId = 1;
@@ -134,9 +141,8 @@ namespace BlazorApp.Server.Services
 
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
-            var response =  new ResponseViewModel() { IsValid = true, Message = "register succces" , ResultData = JsonConvert.SerializeObject(newUser)};
 
-            return response;
+            return  new ResponseViewModel() { IsValid = true, Message = "register succces" , ResultData = JsonConvert.SerializeObject(model)};
         }
 
         public async Task<ActionResult<ResponseViewModel>> UpdateUser(int id, User model)
@@ -146,11 +152,11 @@ namespace BlazorApp.Server.Services
                 return new ResponseViewModel { Message = "Invalid update request", IsValid = false, ResultData = JsonConvert.SerializeObject(model) };
             }
             var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.UserId == id);
-            currentUser.FirstName = model.FirstName;
-            currentUser.LastName = model.LastName;
+            currentUser.FirstName = model.FirstName.ToLower().Trim();
+            currentUser.LastName = model.LastName.ToLower().Trim();
             currentUser.Birthday = model.Birthday;
-            currentUser.Email = model.Email;
-            currentUser.Username = model.Username;
+            currentUser.Email = model.Email.ToLower().Trim();
+            currentUser.Username = model.Username.Trim();
             _context.Users.Update(currentUser);
             await _context.SaveChangesAsync();
             return new ResponseViewModel { IsValid = true, Message = "data updated", ResultData = JsonConvert.SerializeObject(model) };

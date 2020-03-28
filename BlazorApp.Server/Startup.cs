@@ -4,6 +4,7 @@ using BlazorApp.Server.Interfaces;
 using BlazorApp.Server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,6 +30,7 @@ namespace BlazorApp.Server
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
             services.AddAuthentication(auth =>
             {
                 auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -50,6 +52,13 @@ namespace BlazorApp.Server
             services.AddScoped<IUserService, UserService>();
             services.AddControllers();
 
+            services.AddCors(options => options.AddPolicy("CorsPolicy", 
+                                                opts => opts.WithOrigins("https://localhost:44305")
+                                                            .AllowCredentials()
+                                                            .WithMethods("POST","GET","PUT","DELETE","OPTIONS")
+                                                            .WithHeaders("Content-Type", "Access-Control-Allow-Credentials")
+                                                            ));
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +68,8 @@ namespace BlazorApp.Server
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("CorsPolicy");
 
             app.UseHttpsRedirection();
 

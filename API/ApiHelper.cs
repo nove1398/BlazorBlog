@@ -6,20 +6,22 @@ using System.Threading.Tasks;
 
 namespace APILib
 {
-    public class ApiHelper
+    public class ApiHelper 
     {
-        public HttpClient ApiClient { get; set; } 
+        private HttpClient ApiClient { get; set; } = new HttpClient();
+
+
 
         public ApiHelper()
         {
-            ApiClient = new HttpClient();
+           
             ApiClient.DefaultRequestHeaders.Accept.Clear();
             ApiClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public ApiHelper(string url)
         {
-            ApiClient = new HttpClient();
+            
             ApiClient.BaseAddress = new Uri(url);
             ApiClient.DefaultRequestHeaders.Accept.Clear();
             ApiClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
@@ -34,7 +36,9 @@ namespace APILib
 
             // Create a content 
             HttpContent content = new StringContent(jsonData);
-            //content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            content.Headers.Add("Access-Control-Allow-Credentials","true");
+
 
             // Make a request 
             var response = await ApiClient.PostAsync( methodUrl, content);
@@ -46,17 +50,13 @@ namespace APILib
             return obj;
         }
 
-        public async Task<T> Delete<T>(string methodUrl, object model)
+        public async Task<T> Delete<T>(string methodUrl)
         {
-           // HttpClient client = new HttpClient();
 
-            string jsonData = JsonConvert.SerializeObject(model);
-            HttpContent content = new StringContent(jsonData);
-            //content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
             var response = await ApiClient.DeleteAsync( methodUrl);
             var responseString = await response.Content.ReadAsStringAsync();
 
-            T obj = JsonConvert.DeserializeObject<T>(jsonData);
+            T obj = JsonConvert.DeserializeObject<T>(responseString);
 
             return obj;
         }
@@ -69,7 +69,8 @@ namespace APILib
             string jsonData = JsonConvert.SerializeObject(model);
 
             HttpContent content = new StringContent(jsonData);
-            //content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            content.Headers.Add("Access-Control-Allow-Credentials", "true");
 
             var response = await ApiClient.PutAsync(methodUrl, content);
 
@@ -100,8 +101,8 @@ namespace APILib
         {
             //HttpClient client = new HttpClient();
 
-            // Send a request and get the response 
             var response = await ApiClient.GetAsync(methodUrl);
+            // Send a request and get the response 
 
             // Read the data 
             var jsonData = await response.Content.ReadAsStringAsync();

@@ -11,4 +11,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.0-preview2.20160.5" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.2.0-preview2.20160.5" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\API\APILib.csproj" />
+    <ProjectReference Include="..\BlazorApp.Shared\BlazorApp.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Profile\" />
+  </ItemGroup>
 </Project>
